@@ -53,6 +53,7 @@ func (t *bracketStore) Invoke(stub shim.ChaincodeStubInterface, function string,
 	switch function {
 
 	case "UPSERT":
+		fmt.Println("Inserting at UUID: %s", brack.UUID)
 		stub.PutState(brack.UUID, []byte(jsonBracket))
 		err = stub.SetEvent("evtsender", []byte(brack.UUID))
 		if err != nil {
@@ -76,10 +77,12 @@ func (t *bracketStore) Query(stub shim.ChaincodeStubInterface, function string, 
 			return nil, fmt.Errorf("No argument specified")
 		}
 		UUID := args[0]
+		fmt.Println("Querying bracket json for UUID: %s", args[0])
 		bracketBytes, err := stub.GetState(UUID)
 		if err != nil {
 			return nil, err
 		}
+		fmt.Println("Returning : %s", bracketBytes)
 		return bracketBytes, nil
 
 	default:
