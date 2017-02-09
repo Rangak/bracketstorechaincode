@@ -47,7 +47,7 @@ func (t *bracketStore) Invoke(stub shim.ChaincodeStubInterface, function string,
 	err := json.Unmarshal([]byte(jsonBracket), brack)
 	if err != nil {
 		fmt.Printf("Error getting summary JSON from %s", jsonBracket)
-		return nil, errors.New("Error getting summary JSON")
+		return nil, fmt.Errorf("Error getting summary JSON %s", jsonBracket)
 	}
 
 	switch function {
@@ -57,7 +57,7 @@ func (t *bracketStore) Invoke(stub shim.ChaincodeStubInterface, function string,
 		stub.PutState(brack.UUID, []byte(jsonBracket))
 		err = stub.SetEvent("evtsender", []byte(brack.UUID))
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("Inserting at UUID: %s", brack.UUID)
 		}
 		return nil, nil
 
