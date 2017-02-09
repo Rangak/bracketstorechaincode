@@ -44,7 +44,7 @@ func (t *bracketStore) Invoke(stub shim.ChaincodeStubInterface, function string,
 	jsonBracket := args[0]
 	brack := bracketSummary{}
 
-	err := json.Unmarshal([]byte(jsonBracket), brack)
+	err := json.Unmarshal([]byte(jsonBracket), &brack)
 	if err != nil {
 		fmt.Printf("Error getting summary JSON from %s", jsonBracket)
 		return nil, fmt.Errorf("Error getting summary JSON %s", jsonBracket)
@@ -62,8 +62,8 @@ func (t *bracketStore) Invoke(stub shim.ChaincodeStubInterface, function string,
 		return nil, nil
 
 	default:
-		fmt.Println("Invalid function type")
-		return nil, errors.New("Invalid function type")
+		fmt.Printf("Invalid function type %s", function)
+		return nil, fmt.Errorf("Invalid function type %s", function)
 	}
 }
 
